@@ -62,7 +62,8 @@ stderr_logfile=/var/log/fixdns/stderr.log
 stdout_logfile=/var/log/fixdns/stdout.log
 EOF
 
-wget -q -O corplink.deb https://oss-s3.ifeilian.com/linux/FeiLian_Linux_v2.0.9_r615_97b98b.deb
+# note: here I've changed the corplink from amd64 to arm64
+wget -q -O corplink.deb https://oss-s3.ifeilian.com/linux/FeiLian_Linux_arm64_v2.2.25_r4432_0e49cd.deb
 apt install ./corplink.deb -y
 rm corplink.deb
 cp /usr/share/applications/corplink.desktop $HOME/Desktop/
