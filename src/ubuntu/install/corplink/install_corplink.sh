@@ -62,9 +62,23 @@ stderr_logfile=/var/log/fixdns/stderr.log
 stdout_logfile=/var/log/fixdns/stdout.log
 EOF
 
-# note: here I've changed the corplink from amd64 to arm64
+# Download corplink and extract files manually instead of using package manager
 wget -q -O corplink.deb https://oss-s3.ifeilian.com/linux/FeiLian_Linux_arm64_v2.2.25_r4432_0e49cd.deb
-apt install ./corplink.deb -y
+
+# Extract deb package manually to avoid systemd service activation during installation
+mkdir -p /tmp/corplink_extract
+dpkg-deb -x corplink.deb /tmp/corplink_extract
+# Install only the application files, not the service
+mkdir -p /opt/Corplink
+cp -r /tmp/corplink_extract/opt/Corplink/* /opt/Corplink/
+# Copy desktop file
+mkdir -p /usr/share/applications
+cp -f /tmp/corplink_extract/usr/share/applications/corplink.desktop /usr/share/applications/ || true
+# Cleanup
+rm -rf /tmp/corplink_extract
 rm corplink.deb
-cp /usr/share/applications/corplink.desktop $HOME/Desktop/
-chmod +x $HOME/Desktop/corplink.desktop
+
+# Create desktop shortcut
+mkdir -p $HOME/Desktop/
+cp /usr/share/applications/corplink.desktop $HOME/Desktop/ || true
+chmod +x $HOME/Desktop/corplink.desktop || true
